@@ -1,48 +1,41 @@
-import React, { useState } from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import Note from './Note';
-import NoteForm from './NoteForm';
-import notes from '../notes';
+import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Note from "./Note";
+import CreateArea from "./CreateArea";
 
 function App() {
-  // State to track existing notes and the next available key
-  const [noteList, setNoteList] = useState(notes);
-  const [nextKey, setNextKey] = useState(notes.length + 1);
+  const [notes, setNotes] = useState([]);
 
-  // Function to add a new note
-  const addNote = (newNote) => {
-    // Add the new note to the list
-    setNoteList([...noteList, { ...newNote, id: nextKey }]);
-    // Increment the next available key for the next note
-    setNextKey(nextKey + 1);
-  };
+  function addNote(newNote) {
+    setNotes(prevNotes => {
+      return [...prevNotes, newNote];
+    });
+  }
 
-  // Function to delete a note
-  const deleteNote = (id) => {
-    // Filter out the note with the provided id
-    const updatedNotes = noteList.filter(note => note.id !== id);
-    // Update the note list
-    setNoteList(updatedNotes);
-  };
+  function deleteNote(id) {
+    setNotes(prevNotes => {
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
+  }
 
   return (
     <div>
       <Header />
-      {/* Render existing notes */}
-      {noteList.map(note => (
-        <Note
-          key={note.id}
-          id={note.id}
-          title={note.title}
-          content={note.content}
-          onDeleteNote={deleteNote} 
-        />
-      ))}
-      {/* Render NoteForm component for adding new note */}
-      <div className="note-form">
-        <NoteForm onAddNote={addNote} />
-      </div>
+      <CreateArea onAdd={addNote} />
+      {notes.map((noteItem, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={noteItem.title}
+            content={noteItem.content}
+            onDelete={deleteNote}
+          />
+        );
+      })}
       <Footer />
     </div>
   );

@@ -1,27 +1,17 @@
-// Note.jsx
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
 function Note(props) {
-  const handleDelete = () => {
-    // Call the onDeleteNote function passed from the parent component
-    props.onDeleteNote(props.id);
-  };
+  function handleClick() {
+    props.onDelete(props.id);
+  }
 
   return (
-    <div className='note'>
-      <button className="delete-button" onClick={handleDelete}>x</button>
+    <div className="note">
       <h1>{props.title}</h1>
       <p>{props.content}</p>
+      <button onClick={handleClick}>DELETE</button>
     </div>
   );
 }
-
-Note.propTypes = {
-  id: PropTypes.number.isRequired, // Validate 'id' prop as a required number
-  title: PropTypes.string.isRequired, // Validate 'title' prop as a required string
-  content: PropTypes.string.isRequired, // Validate 'content' prop as a required string
-  onDeleteNote: PropTypes.func.isRequired // Validate 'onDeleteNote' prop as a required function
-};
 
 export default Note;
